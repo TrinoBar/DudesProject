@@ -1,0 +1,181 @@
+import random
+
+class stru:
+    def __init__(self):
+        self.level = 0
+        self.life = 0
+        self.type = 0
+        self.speed = 0
+        self.posx =0
+        self.posy =0
+        self.power=0
+        self.exp=0
+
+def create_board():
+    board = [
+        [[0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0]],
+        [[0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0]],
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    ]
+    return board
+
+
+
+def bosque(PERSON):
+    P=PERSON.level*2-1
+    Pe=random.randint(1,6)
+    NEG_HELP=int(abs(PERSON.type-1))*PERSON.level
+    #NEG_HELP es una variable que perjudica a quien no le es recomendable cazar aquí
+    if Pe == (P+NEG_HELP) or Pe > (P + NEG_HELP) :
+        print("Sale mosntruo")
+        return True
+    else:
+        print("This Mountain is empty right now")
+        return False
+
+def mountain(PERSON):
+    P=PERSON.level*2-1
+    Pe=random.randint(1,6)
+    NEG_HELP=int(abs(PERSON.type-2))*PERSON.level
+    #NEG_HELP es una variable que perjudica a quien no le es recomendable cazar aquí
+    if Pe == (P+NEG_HELP) or Pe > (P + NEG_HELP) :
+        print("There is a Monster in this Mountain")
+    else:
+        print("This Mountain is empty right now")
+
+def hills(PERSON):
+    P=PERSON.level*2-1
+    Pe=random.randint(1,6)
+    NEG_HELP=int(abs(PERSON.type-3))*PERSON.level
+    #NEG_HELP es una variable que perjudica a quien no le es recomendable cazar aquí
+    if Pe == (P+NEG_HELP) or Pe > (P + NEG_HELP) :
+        print("There is a Monster in these Hills")
+    else:
+        print("These Hills are empty right now")
+
+def MAGICIAN(NIV):
+    MAGO=stru()
+    MAGO.level = NIV
+    MAGO.life = 60+(MAGO.level-1)*10
+    MAGO.type = 1
+    if NIV > 1:
+        MAGO.speed = 3
+    else:
+        MAGO.speed=2
+    MAGO.power = 30+MAGO.level*15
+    return MAGO
+
+def WARRIOR(NIV):
+    MAGO=stru()
+    MAGO.level = NIV
+    MAGO.life = 90+(MAGO.level-1)*25
+    MAGO.type = 2
+    MAGO.speed = 2+MAGO.level
+    MAGO.power = 11+MAGO.level*9
+    return MAGO
+
+def ARCHER(NIV):
+    MAGO=stru()
+    MAGO.level = NIV
+    MAGO.life = 70+(MAGO.level-1)*5
+    MAGO.type = 3
+    MAGO.speed = 3+MAGO.level
+    MAGO.power = 18+MAGO.level*12
+    return MAGO
+
+def CREATURE(NIV):
+    MAGO=stru()
+    MAGO.level = NIV
+    MAGO.life = 35+(MAGO.level-1)*5
+    MAGO.type = 4
+    MAGO.power = 25+(MAGO.level-1)*6
+    return MAGO
+
+MANU=MAGICIAN(1)
+
+bosque(MANU)
+
+def print_PERSON(PERSON):
+    if PERSON.type == 1:
+        type="Magician"
+    if PERSON.type == 2:
+        type="Warrior"
+    if PERSON.type == 3:
+        type="Archer"
+    print(type," nivel=",PERSON.level," vida=", PERSON.life," Poder=",PERSON.power," Vel=",PERSON.speed," EXP=",PERSON.exp,sep=" ")
+
+
+def battle(PERSON,CREATURE):
+    DAMAGE=PERSON.power * (random.randint(1,6)+random.randint(1,6)+random.randint(1,6))/10
+    DAMAGE_CREATURE=CREATURE.power*(random.randint(1,6)+random.randint(1,6))/8
+
+    if DAMAGE>= CREATURE.life:
+        print("Win!! the creature is dead!!")
+        PERSON.exp +=2
+        return True
+    else:
+        if DAMAGE > DAMAGE_CREATURE:
+            print("Win!!")
+            PERSON.exp = PERSON.exp+1
+            return True
+        if DAMAGE_CREATURE>=PERSON.life:
+            PERSON.exp = PERSON.exp-1
+            return False
+        print("You flee")
+        return False
+
+def HERO_BATTLE(PERSON1,PERSON2):
+    DAMAGE1=PERSON1.power * (random.randint(1,6)+random.randint(1,6)+random.randint(1,6))/10
+    DAMAGE2=PERSON2.power * (random.randint(1,6)+random.randint(1,6)+random.randint(1,6))/10
+
+    if DAMAGE1>= PERSON2.life:
+        print("Win!! the DEFENSOR HERO is dead!!")
+        PERSON1.exp +=5*PERSON2.level
+        return True
+    else:
+        if DAMAGE2 >= PERSON1.life:
+            print("Lose!! the DEFENSOR HERO Wins!!")
+            PERSON2.exp += 5 * PERSON1.level
+            return False
+        else:
+            PERSON1.life=PERSON1.life-DAMAGE2
+            PERSON2.life=PERSON2.life-DAMAGE1
+            return HERO_BATTLE(PERSON1,PERSON2)
+
+
+def MOVES_TO(PLACE,HERO):
+    if PLACE==1:
+        if bosque(HERO):
+            battle(HERO,CREATURE(HERO.level+abs(HERO.type-1)))
+    if HERO.exp >= 10*HERO.level:
+        if HERO.type==1:
+            HERO=MAGICIAN(HERO.level+1)
+        if HERO.type==2:
+            HERO=WARRIOR(HERO.level+1)
+        if HERO.type==3:
+            HERO=ARCHER(HERO.level+1)
+
+
+PERSONAS=[MAGICIAN(1),WARRIOR(1),ARCHER(1)]
+
+MAP=create_board()
+TIM=MAGICIAN(3)
+Diablo=CREATURE(10)
+TOM=ARCHER(3)
+TAM=WARRIOR(3)
+
+
+# for i in range(20):                         #testing batallas heroicas
+#     HERO_BATTLE(TIM,TAM)
+#     TIM=MAGICIAN(3)
+#     TAM=WARRIOR(3)
+
+Marius=MAGICIAN(1)
+for i in range(20):
+    MOVES_TO(1,Marius)
+
+print_PERSON(Marius)
